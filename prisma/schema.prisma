@@ -1,0 +1,174 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Auth.js required models ─────────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── Core models ─────────────────────────────────────────────────────────────
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  username      String   @unique
+  passwordHash  String?  // nullable so existing rows don't break
+  timezone      String   @default("UTC")
+  avatarUrl     String?
+  bio           String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  accounts    Account[]
+  sessions    Session[]
+  enrollments Enrollment[]
+  songs       Song[]
+  adminOf     Group[]      @relation("GroupAdmin")
+  plays       Play[]
+}
+
+model Challenge {
+  id        String          @id @default(cuid())
+  year      Int             @unique  // 2027, 2028, …
+  startDate DateTime        // Feb 1 00:00:00 UTC of that year
+  endDate   DateTime        // Feb 28 23:59:59 UTC of that year
+  status    ChallengeStatus @default(UPCOMING)
+  createdAt DateTime        @default(now())
+
+  groups      Group[]
+  enrollments Enrollment[]
+}
+
+enum ChallengeStatus {
+  UPCOMING
+  ACTIVE
+  COMPLETE
+}
+
+model Group {
+  id                String             @id @default(cuid())
+  challengeId       String
+  adminId           String
+  name              String
+  slug              String             // URL-safe, unique within a challenge year
+  description       String?
+  visibility        GroupVisibility    @default(PUBLIC)
+  archiveVisibility ArchiveVisibility  @default(MEMBERS)
+  enrollmentOpen    Boolean            @default(true)  // locked when challenge starts
+  maxMembers        Int?               // null = unlimited
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  challenge   Challenge    @relation(fields: [challengeId], references: [id])
+  admin       User         @relation("GroupAdmin", fields: [adminId], references: [id])
+  enrollments Enrollment[]
+
+  @@unique([challengeId, slug])
+}
+
+enum GroupVisibility {
+  PUBLIC   // discoverable, open join
+  PRIVATE  // invite only
+}
+
+// Who can see a group's songs after the challenge ends
+enum ArchiveVisibility {
+  PUBLIC   // anyone, even logged-out
+  MEMBERS  // only enrolled members of the group
+  ARTIST   // only the artist themselves
+}
+
+model Enrollment {
+  id          String    @id @default(cuid())
+  userId      String
+  challengeId String
+  groupId     String?   // null = solo (no group)
+  timezone    String    // snapshot of user.timezone at enrollment time
+  enrolledAt  DateTime  @default(now())
+  lockedAt    DateTime? // set when challenge goes ACTIVE — no changes after this
+
+  user      User       @relation(fields: [userId], references: [id])
+  challenge Challenge  @relation(fields: [challengeId], references: [id])
+  group     Group?     @relation(fields: [groupId], references: [id])
+  songs     Song[]
+
+  // One enrollment per artist per challenge year
+  @@unique([userId, challengeId])
+}
+
+model Song {
+  id           String   @id @default(cuid())
+  enrollmentId String
+  userId       String
+  dayNumber    Int      // 1–28, corresponds to Feb day
+  title        String?
+  audioUrl     String   // Cloudinary secure_url
+  audioKey     String   // Cloudinary public_id (for deletion/management)
+  duration     Int?     // seconds
+  rating       Int?     // 1–10, self-rating only
+  notes        String?  // optional artist notes
+  flagged      Boolean  @default(false)  // basic moderation flag
+  submittedAt  DateTime @default(now())  // actual wall-clock submission time
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
+  plays      Play[]
+
+  // One song per day per enrollment — the core constraint
+  @@unique([enrollmentId, dayNumber])
+  @@index([userId])
+}
+
+model Play {
+  id       String   @id @default(cuid())
+  songId   String
+  userId   String?  // null = anonymous / logged-out play
+  playedAt DateTime @default(now())
+
+  song Song  @relation(fields: [songId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([songId])  // fast COUNT(*) for play totals
+}
