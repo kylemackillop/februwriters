@@ -11,6 +11,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'All fields are required.' }, { status: 400 })
     }
 
+    if (!timezone || typeof timezone !== 'string' || timezone.trim().length === 0 || timezone.length > 64) {
+      return NextResponse.json({ error: 'Invalid timezone.' }, { status: 400 })
+    }
+
     if (username.length < 3 || !/^[a-z0-9_]+$/.test(username)) {
       return NextResponse.json({ error: 'Username must be lowercase letters, numbers, or underscores.' }, { status: 400 })
     }
@@ -38,7 +42,7 @@ export async function POST(req: NextRequest) {
         username: username.toLowerCase(),
         email: email.toLowerCase(),
         passwordHash,
-        timezone: timezone ?? 'UTC',
+        timezone,
       },
     })
 

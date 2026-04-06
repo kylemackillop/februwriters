@@ -1,16 +1,26 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function RegisterPage() {
   const router = useRouter()
-  const [form, setForm] = useState({
-    name: '', username: '', email: '', password: '', timezone: ''
-  })
-  const [error, setError]   = useState('')
+  const [form, setForm] = useState({ name: '', username: '', email: '', password: '' })
+  const [timezone, setTimezone]         = useState('')
+  const [timezoneDisplay, setTimezoneDisplay] = useState('')
+  const [error, setError]     = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const iana = Intl.DateTimeFormat().resolvedOptions().timeZone
+    setTimezone(iana)
+
+    const display = Intl.DateTimeFormat(undefined, { timeZoneName: 'long' })
+      .formatToParts(new Date())
+      .find(p => p.type === 'timeZoneName')?.value ?? iana
+    setTimezoneDisplay(display)
+  }, [])
 
   function set(field: string, value: string) {
     setForm(f => ({ ...f, [field]: value }))
@@ -25,10 +35,7 @@ export default function RegisterPage() {
       const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...form,
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        }),
+        body: JSON.stringify({ ...form, timezone }),
       })
 
       const contentType = res.headers.get('content-type') ?? ''
@@ -85,6 +92,12 @@ export default function RegisterPage() {
               />
             </div>
           ))}
+
+          {timezoneDisplay && (
+            <p className="text-xs text-[#7A8FA3]">
+              Your deadline timezone will be set to {timezoneDisplay}.
+            </p>
+          )}
 
           {error && (
             <p className="text-sm text-[#c45c3a]">{error}</p>
