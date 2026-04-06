@@ -54,7 +54,7 @@ model User {
   name          String?
   username      String   @unique
   passwordHash  String?  // nullable so existing rows don't break
-  timezone      String   @default("UTC")
+  timezone      String   @default("America/New_York")
   avatarUrl     String?
   bio           String?
   createdAt     DateTime @default(now())
@@ -130,35 +130,32 @@ model Enrollment {
   user      User       @relation(fields: [userId], references: [id])
   challenge Challenge  @relation(fields: [challengeId], references: [id])
   group     Group?     @relation(fields: [groupId], references: [id])
-  songs     Song[]
 
   // One enrollment per artist per challenge year
   @@unique([userId, challengeId])
 }
 
 model Song {
-  id           String   @id @default(cuid())
-  enrollmentId String
-  userId       String
-  dayNumber    Int      // 1–28, corresponds to Feb day
-  title        String?
-  audioUrl     String   // Cloudinary secure_url
-  audioKey     String   // Cloudinary public_id (for deletion/management)
-  duration     Int?     // seconds
-  rating       Int?     // 1–10, self-rating only
-  notes        String?  // optional artist notes
-  flagged      Boolean  @default(false)  // basic moderation flag
-  submittedAt  DateTime @default(now())  // actual wall-clock submission time
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id              String   @id @default(cuid())
+  title           String   @db.VarChar(64)
+  slug            String   @unique
+  audioUrl        String
+  artworkUrl      String?
+  lyrics          String?  @db.Text
+  notes           String?  @db.Text
+  genre           String?
+  durationSeconds Int
+  dayNumber       Int
+  year            Int
+  isPublic        Boolean  @default(true)
+  isDraft         Boolean  @default(false)
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  plays           Play[]
 
-  enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
-  user       User       @relation(fields: [userId], references: [id])
-  plays      Play[]
-
-  // One song per day per enrollment — the core constraint
-  @@unique([enrollmentId, dayNumber])
-  @@index([userId])
+  @@unique([userId, dayNumber, year])
 }
 
 model Play {
