@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         { resource_type: 'video', folder: 'februwriters/audio', format: ext.slice(1) },
         (error, res) => {
           if (error || !res) reject(error ?? new Error('Cloudinary upload failed'))
-          else resolve(res as { secure_url: string; duration: number })
+          else resolve(res as unknown as { secure_url: string; duration: number })
         }
       )
       stream.end(buffer)
