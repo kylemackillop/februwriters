@@ -7,12 +7,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge }    from '@/components/ui/badge'
 import {
   Card,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import SongCard from '@/components/song-card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   Dialog,
@@ -171,41 +170,26 @@ export default function DevPage() {
         {/* Card */}
         <Section title="Card">
           <div className="flex flex-wrap gap-4">
-            {/* Light surface */}
-            <Card className="w-72 bg-white border-feb-bluegray/20">
-              <CardHeader className="flex flex-row items-center justify-between gap-3">
-                <div>
-                  <CardTitle className="text-feb-slate">Song #14</CardTitle>
-                  <CardDescription className="text-feb-bluegray">
-                    February 14 · 2:34
-                  </CardDescription>
-                  <a href="#" className="text-xs text-feb-slate/70 hover:text-feb-slate underline-offset-2 hover:underline mt-1 block">
-                    Details
-                  </a>
-                </div>
-                <button className="w-9 h-9 rounded-full bg-feb-gold flex items-center justify-center flex-shrink-0 hover:bg-feb-gold-light transition-colors">
-                  <span className="border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-feb-slate ml-0.5 block" />
-                </button>
-              </CardHeader>
-            </Card>
-
-            {/* Dark surface */}
-            <Card className="w-72 bg-feb-slate border-feb-slate-mid">
-              <CardHeader className="flex flex-row items-center justify-between gap-3">
-                <div>
-                  <CardTitle className="text-feb-linen">Song #14</CardTitle>
-                  <CardDescription className="text-feb-bluegray">
-                    February 14 · 2:34
-                  </CardDescription>
-                  <a href="#" className="text-xs text-feb-linen/70 hover:text-feb-linen underline-offset-2 hover:underline mt-1 block">
-                    Details
-                  </a>
-                </div>
-                <button className="w-9 h-9 rounded-full bg-feb-gold flex items-center justify-center flex-shrink-0 hover:bg-feb-gold-light transition-colors">
-                  <span className="border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-feb-slate ml-0.5 block" />
-                </button>
-              </CardHeader>
-            </Card>
+            <div className="w-72">
+              <SongCard
+                day={14}
+                date="February 14 · 2:34"
+                title="Untitled Sketch"
+                artistName="kylemackillop"
+                audioSrc="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                showArtist={false}
+              />
+            </div>
+            <div className="w-72">
+              <SongCard
+                day={7}
+                date="February 7 · 1:52"
+                title="Morning Loop"
+                artistName="kylemackillop"
+                audioSrc="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                showArtist={true}
+              />
+            </div>
           </div>
         </Section>
 
