@@ -92,16 +92,8 @@ export default function AudioPlayer({ src, duration: durationProp }: AudioPlayer
             <div className="w-[3px] h-3 bg-feb-slate rounded-sm" />
           </div>
         ) : (
-          // Play — CSS triangle
-          <div
-            style={{
-              width: 0, height: 0,
-              borderTop:    '5px solid transparent',
-              borderBottom: '5px solid transparent',
-              borderLeft:   '8px solid currentColor',
-              marginLeft: 2,
-            }}
-          />
+          // Play — border-trick triangle (consistent with card play buttons)
+          <span className="border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-feb-slate ml-0.5 block" />
         )}
       </button>
 

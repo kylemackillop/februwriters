@@ -173,48 +173,38 @@ export default function DevPage() {
           <div className="flex flex-wrap gap-4">
             {/* Light surface */}
             <Card className="w-72 bg-white border-feb-bluegray/20">
-              <CardHeader>
-                <CardTitle className="text-feb-slate">Song #14</CardTitle>
-                <CardDescription className="text-feb-bluegray">
-                  February 14 · 2:34
-                </CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between gap-3">
+                <div>
+                  <CardTitle className="text-feb-slate">Song #14</CardTitle>
+                  <CardDescription className="text-feb-bluegray">
+                    February 14 · 2:34
+                  </CardDescription>
+                  <a href="#" className="text-xs text-feb-slate/70 hover:text-feb-slate underline-offset-2 hover:underline mt-1 block">
+                    Details
+                  </a>
+                </div>
+                <button className="w-9 h-9 rounded-full bg-feb-gold flex items-center justify-center flex-shrink-0 hover:bg-feb-gold-light transition-colors">
+                  <span className="border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-feb-slate ml-0.5 block" />
+                </button>
               </CardHeader>
-              <CardContent>
-                <p className="text-feb-slate text-sm">
-                  An untitled sketch from day fourteen. Raw and unpolished.
-                </p>
-              </CardContent>
-              <CardFooter className="flex gap-2">
-                <Button size="sm" className="bg-feb-gold text-feb-slate hover:bg-feb-gold-light">
-                  Play
-                </Button>
-                <Button size="sm" variant="ghost" className="text-feb-bluegray hover:text-feb-slate">
-                  Details
-                </Button>
-              </CardFooter>
             </Card>
 
             {/* Dark surface */}
             <Card className="w-72 bg-feb-slate border-feb-slate-mid">
-              <CardHeader>
-                <CardTitle className="text-feb-linen">Song #14</CardTitle>
-                <CardDescription className="text-feb-bluegray">
-                  February 14 · 2:34
-                </CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between gap-3">
+                <div>
+                  <CardTitle className="text-feb-linen">Song #14</CardTitle>
+                  <CardDescription className="text-feb-bluegray">
+                    February 14 · 2:34
+                  </CardDescription>
+                  <a href="#" className="text-xs text-feb-linen/70 hover:text-feb-linen underline-offset-2 hover:underline mt-1 block">
+                    Details
+                  </a>
+                </div>
+                <button className="w-9 h-9 rounded-full bg-feb-gold flex items-center justify-center flex-shrink-0 hover:bg-feb-gold-light transition-colors">
+                  <span className="border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-feb-slate ml-0.5 block" />
+                </button>
               </CardHeader>
-              <CardContent>
-                <p className="text-feb-linen text-sm">
-                  An untitled sketch from day fourteen. Raw and unpolished.
-                </p>
-              </CardContent>
-              <CardFooter className="flex gap-2">
-                <Button size="sm" className="bg-feb-gold text-feb-slate hover:bg-feb-gold-light">
-                  Play
-                </Button>
-                <Button size="sm" variant="ghost" className="text-feb-bluegray hover:text-feb-linen">
-                  Details
-                </Button>
-              </CardFooter>
             </Card>
           </div>
         </Section>
@@ -260,7 +250,7 @@ export default function DevPage() {
               <DialogFooter>
                 <Button
                   variant="ghost"
-                  className="text-feb-bluegray"
+                  className="text-feb-linen/80 hover:text-feb-linen"
                   onClick={() => setDialogOpen(false)}
                 >
                   Cancel
