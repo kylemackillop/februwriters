@@ -22,9 +22,14 @@ export default function SongCard({
   showArtist = false,
   onClick,
 }: SongCardProps) {
-  const { play } = usePlayer()
+  const { currentSong, play, pause, resume } = usePlayer()
+
+  const isThisSong = currentSong?.src === audioSrc
+  const isPlaying  = isThisSong && currentSong?.isPlaying
 
   function handlePlay() {
+    if (isThisSong && isPlaying)  { pause();  return }
+    if (isThisSong && !isPlaying) { resume(); return }
     play({ src: audioSrc, title, artistName })
     onClick?.()
   }
@@ -41,9 +46,20 @@ export default function SongCard({
         </div>
         <button
           onClick={handlePlay}
-          className="w-9 h-9 rounded-full bg-feb-gold flex items-center justify-center flex-shrink-0 hover:bg-feb-gold-light transition-colors"
+          className={
+            isPlaying
+              ? 'w-9 h-9 rounded-full bg-feb-gold flex items-center justify-center flex-shrink-0 hover:bg-feb-gold-light transition-colors'
+              : 'w-9 h-9 rounded-full bg-feb-slate flex items-center justify-center flex-shrink-0 hover:bg-feb-slate-mid transition-colors'
+          }
         >
-          <span className="border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-feb-slate ml-0.5 block" />
+          {isPlaying ? (
+            <div className="flex gap-[3px]">
+              <div className="w-[3px] h-3 bg-feb-slate rounded-sm" />
+              <div className="w-[3px] h-3 bg-feb-slate rounded-sm" />
+            </div>
+          ) : (
+            <span className="border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-feb-gold ml-0.5 block" />
+          )}
         </button>
       </CardHeader>
     </Card>
