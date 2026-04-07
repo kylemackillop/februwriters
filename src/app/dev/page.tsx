@@ -175,8 +175,7 @@ export default function DevPage() {
                 day={14}
                 date="February 14 · 2:34"
                 title="Untitled Sketch"
-                artistName="kylemackillop"
-                audioSrc="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                artistName="Kyle MacKillop"
                 showArtist={false}
               />
             </div>
@@ -185,8 +184,7 @@ export default function DevPage() {
                 day={7}
                 date="February 7 · 1:52"
                 title="Morning Loop"
-                artistName="kylemackillop"
-                audioSrc="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                artistName="Kyle MacKillop"
                 showArtist={true}
               />
             </div>
