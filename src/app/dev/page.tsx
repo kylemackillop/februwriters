@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/dialog'
 import { StreakCalendar } from '@/components/streak-calendar'
 import FormFieldInput from '@/components/form-field-input'
+import UploadDialog from '@/components/upload-dialog'
 import AudioPlayer from '@/components/audio-player'
 import {
   DropdownMenu,
@@ -104,7 +105,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function DevPage() {
-  const [dialogOpen, setDialogOpen] = useState(false)
+  const [dialogOpen, setDialogOpen]             = useState(false)
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
 
   return (
     <main className="min-h-screen bg-feb-linen px-6 py-12">
@@ -262,6 +264,18 @@ export default function DevPage() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+        </Section>
+
+        {/* Upload Dialog */}
+        <Section title="Upload Dialog">
+          <Button onClick={() => setUploadDialogOpen(true)}>Open Upload Dialog</Button>
+          <UploadDialog
+            open={uploadDialogOpen}
+            onOpenChange={setUploadDialogOpen}
+            dayNumber={23}
+            date="February 23"
+            onSuccess={(song) => console.log('upload success', song)}
+          />
         </Section>
 
         {/* Dropdown Menu */}
