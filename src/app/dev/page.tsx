@@ -24,6 +24,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { StreakCalendar } from '@/components/streak-calendar'
+import AudioPlayer from '@/components/audio-player'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -294,6 +295,13 @@ export default function DevPage() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+        </Section>
+
+        {/* Audio Player */}
+        <Section title="Audio Player">
+          <div className="max-w-sm bg-white border border-feb-bluegray/20 rounded-lg px-4 py-3">
+            <AudioPlayer src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" />
+          </div>
         </Section>
 
         {/* StreakCalendar component */}
