@@ -180,6 +180,7 @@ export default function DevPage() {
 
         {/* Card */}
         <Section title="Card">
+          <p className="text-xs text-feb-bluegray mb-4">Click a play button to trigger the mini player.</p>
           <div className="flex flex-wrap gap-4">
             <div className="w-72">
               <SongCard
@@ -187,6 +188,7 @@ export default function DevPage() {
                 date="February 14 · 2:34"
                 title="Untitled Sketch"
                 artistName="Kyle MacKillop"
+                audioSrc="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
                 showArtist={false}
               />
             </div>
@@ -196,6 +198,7 @@ export default function DevPage() {
                 date="February 7 · 1:52"
                 title="Morning Loop"
                 artistName="Kyle MacKillop"
+                audioSrc="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
                 showArtist={true}
               />
             </div>

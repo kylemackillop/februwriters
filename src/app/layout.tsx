@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Providers from '@/components/providers'
 import Nav from '@/components/nav'
+import MiniPlayer from '@/components/mini-player'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -21,6 +22,7 @@ export default function RootLayout({
           <main className="min-h-screen bg-feb-linen">
             {children}
           </main>
+          <MiniPlayer />
         </Providers>
       </body>
     </html>
