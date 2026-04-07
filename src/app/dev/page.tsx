@@ -278,7 +278,7 @@ export default function DevPage() {
         {/* Dropdown Menu */}
         <Section title="Dropdown Menu">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger>
               <Button variant="outline">Open Menu</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-feb-slate-dark border-feb-slate-mid text-feb-linen">
