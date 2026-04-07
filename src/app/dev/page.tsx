@@ -243,7 +243,7 @@ export default function DevPage() {
         {/* Dialog */}
         <Section title="Dialog">
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
+            <DialogTrigger>
               <Button>Open Dialog</Button>
             </DialogTrigger>
             <DialogContent className="bg-feb-slate-dark border-feb-slate-mid text-feb-linen">
