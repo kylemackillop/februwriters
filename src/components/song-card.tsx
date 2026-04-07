@@ -4,6 +4,7 @@ import { Card, CardHeader } from '@/components/ui/card'
 import { usePlayer } from '@/context/player-context'
 
 interface SongCardProps {
+  id: string
   day: number
   date: string
   title: string
@@ -15,6 +16,7 @@ interface SongCardProps {
 }
 
 export default function SongCard({
+  id,
   date,
   title,
   artistName,
@@ -24,13 +26,13 @@ export default function SongCard({
 }: SongCardProps) {
   const { currentSong, play, pause, resume } = usePlayer()
 
-  const isThisSong = currentSong?.src === audioSrc
+  const isThisSong = currentSong?.id === id
   const isPlaying  = isThisSong && currentSong?.isPlaying
 
   function handlePlay() {
     if (isThisSong && isPlaying)  { pause();  return }
     if (isThisSong && !isPlaying) { resume(); return }
-    play({ src: audioSrc, title, artistName })
+    play({ id, src: audioSrc, title, artistName })
     onClick?.()
   }
 

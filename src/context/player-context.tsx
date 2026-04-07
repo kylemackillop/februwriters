@@ -3,6 +3,7 @@
 import { createContext, useContext, useState } from 'react'
 
 export interface PlayerState {
+  id: string
   src: string
   title: string
   artistName: string

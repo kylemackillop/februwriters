@@ -184,6 +184,7 @@ export default function DevPage() {
           <div className="flex flex-wrap gap-4">
             <div className="w-72">
               <SongCard
+                id="demo-1"
                 day={14}
                 date="February 14 · 2:34"
                 title="Untitled Sketch"
@@ -194,6 +195,7 @@ export default function DevPage() {
             </div>
             <div className="w-72">
               <SongCard
+                id="demo-2"
                 day={7}
                 date="February 7 · 1:52"
                 title="Morning Loop"
