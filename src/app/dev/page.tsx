@@ -23,6 +23,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { StreakCalendar } from '@/components/streak-calendar'
+import FormFieldInput from '@/components/form-field-input'
 import AudioPlayer from '@/components/audio-player'
 import {
   DropdownMenu,
@@ -144,6 +145,16 @@ export default function DevPage() {
             <Input placeholder="Email address" type="email" />
             <Input placeholder="Password" type="password" />
             <Input placeholder="Disabled" disabled />
+          </div>
+        </Section>
+
+        {/* Form Field */}
+        <Section title="Form Field">
+          <div className="space-y-4 max-w-sm">
+            <FormFieldInput label="Song title" placeholder="Give it a name" />
+            <FormFieldInput label="Email" type="email" placeholder="you@example.com" hint="We'll never share your email" />
+            <FormFieldInput label="Username" error="That username is taken" placeholder="yourname" />
+            <FormFieldInput label="Password" type="password" required placeholder="••••••••" />
           </div>
         </Section>
 
