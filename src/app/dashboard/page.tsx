@@ -7,6 +7,21 @@ import UploadDialogDesktopTrigger from '@/components/upload-dialog-desktop-trigg
 
 type DayStatus = 'submitted' | 'missed' | 'today' | 'future'
 
+function getChallengeState(now: Date): {
+  state: 'pre' | 'active' | 'post'
+  today: number
+  daysInFebruary: number
+  year: number
+} {
+  const year = now.getFullYear()
+  const month = now.getMonth()
+  const day = now.getDate()
+  const daysInFebruary = new Date(year, 2, 0).getDate()
+  if (month < 1) return { state: 'pre', today: day, daysInFebruary, year }
+  if (month > 1) return { state: 'post', today: day, daysInFebruary, year }
+  return { state: 'active', today: Math.min(day, daysInFebruary), daysInFebruary, year }
+}
+
 export default async function DashboardPage() {
   const session = await auth()
   if (!session?.user) redirect('/login')
@@ -19,15 +34,13 @@ export default async function DashboardPage() {
     orderBy: { dayNumber: 'desc' },
   }) as SongRow[]
 
-  const now   = new Date()
-  const today = Math.min(now.getDate(), 28)
-  const currentYear  = now.getFullYear()
-  const currentMonth = 'February'
+  const { state, today, daysInFebruary, year } = getChallengeState(new Date())
 
   const submittedDays     = new Set(songs.map(s => s.dayNumber))
   const hasSubmittedToday = submittedDays.has(today)
+  const showSubmitCTA     = state === 'active' && !hasSubmittedToday
 
-  const calendarDays = Array.from({ length: 28 }, (_, i) => {
+  const calendarDays = Array.from({ length: daysInFebruary }, (_, i) => {
     const day = i + 1
     let status: DayStatus
     if (submittedDays.has(day))  status = 'submitted'
@@ -44,12 +57,20 @@ export default async function DashboardPage() {
         {/* Hero */}
         <div className="pt-4 pb-3 md:pt-6 flex items-end justify-between">
           <div>
-            <span className="font-serif text-6xl font-bold text-feb-slate leading-none">{today}</span>
-            <p className="text-feb-bluegray text-xs mt-1">{currentMonth} {currentYear}</p>
+            <span className={`font-serif text-6xl font-bold leading-none ${state === 'active' ? 'text-feb-slate' : 'text-feb-bluegray'}`}>
+              {today}
+            </span>
+            <p className="text-feb-bluegray text-xs mt-1">
+              {state === 'pre'
+                ? 'februwriters starts February 1'
+                : state === 'post'
+                ? `februwriters ${year} is complete`
+                : `February ${year}`}
+            </p>
           </div>
 
           {/* Desktop submit CTA */}
-          {!hasSubmittedToday && (
+          {showSubmitCTA && (
             <div className="hidden lg:flex">
               <UploadDialogDesktopTrigger today={today} />
             </div>
@@ -74,8 +95,8 @@ export default async function DashboardPage() {
           </div>
           <div className="flex justify-between mt-1">
             <span className="text-[9px] text-feb-bluegray">Feb 1</span>
-            <span className="text-[9px] text-feb-gold font-semibold">{submittedDays.size} of 28</span>
-            <span className="text-[9px] text-feb-bluegray">Feb 28</span>
+            <span className="text-[9px] text-feb-gold font-semibold">{submittedDays.size} of {daysInFebruary}</span>
+            <span className="text-[9px] text-feb-bluegray">Feb {daysInFebruary}</span>
           </div>
         </div>
 
@@ -84,9 +105,9 @@ export default async function DashboardPage() {
           {/* Left — calendar */}
           <div>
             <p className="text-[10px] font-medium tracking-[0.12em] uppercase text-feb-bluegray mb-3">
-              {currentMonth} {currentYear}
+              February {year}
             </p>
-            <StreakCalendar days={calendarDays} year={currentYear} />
+            <StreakCalendar days={calendarDays} year={year} daysInFebruary={daysInFebruary} />
           </div>
 
           {/* Right — song list */}
@@ -98,7 +119,8 @@ export default async function DashboardPage() {
               songs={songs}
               username={username ?? ''}
               today={today}
-              hasSubmittedToday={hasSubmittedToday}
+              daysInFebruary={daysInFebruary}
+              showSubmitCTA={showSubmitCTA}
             />
           </div>
         </div>
@@ -112,7 +134,8 @@ export default async function DashboardPage() {
             songs={songs}
             username={username ?? ''}
             today={today}
-            hasSubmittedToday={hasSubmittedToday}
+            daysInFebruary={daysInFebruary}
+            showSubmitCTA={showSubmitCTA}
           />
         </div>
 

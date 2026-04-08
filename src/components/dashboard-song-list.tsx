@@ -18,7 +18,8 @@ interface Props {
   songs: SongRow[]
   username: string
   today: number
-  hasSubmittedToday: boolean
+  daysInFebruary: number
+  showSubmitCTA: boolean
 }
 
 function PlayButton({ song }: { song: SongRow }) {
@@ -53,7 +54,7 @@ function PlayButton({ song }: { song: SongRow }) {
   )
 }
 
-export default function DashboardSongList({ songs, username, today, hasSubmittedToday }: Props) {
+export default function DashboardSongList({ songs, username, today, daysInFebruary, showSubmitCTA }: Props) {
   const router = useRouter()
   const [uploadOpen, setUploadOpen] = useState(false)
 
@@ -92,7 +93,7 @@ export default function DashboardSongList({ songs, username, today, hasSubmitted
       </div>
 
       {/* Mobile sticky submit CTA */}
-      {!hasSubmittedToday && (
+      {showSubmitCTA && (
         <div className="fixed bottom-16 left-0 right-0 px-4 pb-2 lg:hidden">
           <button
             onClick={() => setUploadOpen(true)}

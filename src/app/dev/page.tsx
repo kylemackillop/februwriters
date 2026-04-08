@@ -308,7 +308,7 @@ export default function DevPage() {
 
         {/* StreakCalendar component */}
         <Section title="StreakCalendar component">
-          <StreakCalendar days={DEMO_DAYS} year={2026} />
+          <StreakCalendar days={DEMO_DAYS} year={2026} daysInFebruary={28} />
         </Section>
 
         {/* Streak Grid (inline legacy reference) */}

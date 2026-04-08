@@ -13,6 +13,7 @@ export interface StreakDay {
 interface StreakCalendarProps {
   days: StreakDay[]
   year: number
+  daysInFebruary: number
   showStreakCalendar?: boolean
 }
 
@@ -40,7 +41,7 @@ const LEGEND = [
   { label: 'upcoming',  bg: '#253347',   border: undefined,  opacity: 0.08 },
 ]
 
-export function StreakCalendar({ days, showStreakCalendar = true }: StreakCalendarProps) {
+export function StreakCalendar({ days, daysInFebruary, showStreakCalendar = true }: StreakCalendarProps) {
   const router = useRouter()
 
   if (!showStreakCalendar) return null
@@ -48,6 +49,7 @@ export function StreakCalendar({ days, showStreakCalendar = true }: StreakCalend
   const submitted = days.filter(d => d.status === 'submitted').length
   const missed    = days.filter(d => d.status === 'missed').length
   const remaining = days.filter(d => d.status === 'future').length
+  const total     = daysInFebruary
 
   function handleClick(day: StreakDay) {
     if (day.status === 'missed' || day.status === 'future') return
@@ -61,7 +63,7 @@ export function StreakCalendar({ days, showStreakCalendar = true }: StreakCalend
     <div className="w-full space-y-3">
       <p className="font-mono text-xs text-[#7A8FA3]">
         <span className="text-[#C49A1A]">{submitted}</span>
-        {' of 28 days · '}{missed} missed{' · '}{remaining} remaining
+        {` of ${total} days · `}{missed} missed{' · '}{remaining} remaining
       </p>
 
       <div className="space-y-[3px]">
