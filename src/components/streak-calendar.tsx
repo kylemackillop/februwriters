@@ -17,7 +17,7 @@ interface StreakCalendarProps {
   showStreakCalendar?: boolean
 }
 
-const GRID = { display: 'grid', gridTemplateColumns: 'repeat(14, minmax(0, 1fr))', gap: '3px' }
+const GRID = { display: 'grid', gridTemplateColumns: 'repeat(14, minmax(0, 1fr))', gap: '6px' }
 
 function cellClasses(status: DayStatus): string {
   const base = 'rounded flex items-center justify-center'
@@ -66,7 +66,7 @@ export function StreakCalendar({ days, daysInFebruary, showStreakCalendar = true
         {` of ${total} days · `}{missed} missed{' · '}{remaining} remaining
       </p>
 
-      <div className="space-y-[3px]">
+      <div className="space-y-1.5">
         {rows.map((row, ri) => (
           <div key={ri} style={GRID}>
             {row.map(day => (
