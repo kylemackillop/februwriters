@@ -93,7 +93,7 @@ export default function DashboardSongList({ songs, username, today, hasSubmitted
 
       {/* Mobile sticky submit CTA */}
       {!hasSubmittedToday && (
-        <div className="fixed bottom-16 left-0 right-0 px-4 pb-2 md:hidden">
+        <div className="fixed bottom-16 left-0 right-0 px-4 pb-2 lg:hidden">
           <button
             onClick={() => setUploadOpen(true)}
             className="w-full bg-feb-gold rounded-lg px-4 py-3 flex items-center justify-between hover:bg-feb-gold-light transition-colors"

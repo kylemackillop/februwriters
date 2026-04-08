@@ -17,7 +17,6 @@ interface StreakCalendarProps {
 }
 
 const GRID = { display: 'grid', gridTemplateColumns: 'repeat(14, minmax(0, 1fr))', gap: '3px' }
-const CELL = { aspectRatio: '1.8', fontSize: '10px', fontFamily: 'system-ui' }
 
 function cellClasses(status: DayStatus): string {
   const base = 'rounded flex items-center justify-center'
@@ -71,8 +70,8 @@ export function StreakCalendar({ days, showStreakCalendar = true }: StreakCalend
             {row.map(day => (
               <div
                 key={day.day}
-                className={cellClasses(day.status)}
-                style={{ ...CELL, color: CELL_COLOR[day.status] }}
+                className={`${cellClasses(day.status)} w-8 h-8 md:w-10 md:h-10 text-[10px] md:text-xs`}
+                style={{ fontFamily: 'system-ui', color: CELL_COLOR[day.status] }}
                 onClick={() => handleClick(day)}
               >
                 {day.day}
