@@ -18,7 +18,7 @@ function getChallengeState(now: Date): {
   const day = now.getDate()
   const daysInFebruary = new Date(year, 2, 0).getDate()
   if (month < 1) return { state: 'pre', today: day, daysInFebruary, year }
-  if (month > 1) return { state: 'post', today: day, daysInFebruary, year }
+  if (month > 1) return { state: 'post', today: daysInFebruary + 1, daysInFebruary, year }
   return { state: 'active', today: Math.min(day, daysInFebruary), daysInFebruary, year }
 }
 
