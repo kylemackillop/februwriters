@@ -72,7 +72,7 @@ export function StreakCalendar({ days, daysInFebruary, showStreakCalendar = true
             {row.map(day => (
               <div
                 key={day.day}
-                className={`${cellClasses(day.status)} w-8 h-8 md:w-10 md:h-10 text-[10px] md:text-xs`}
+                className={`${cellClasses(day.status)} aspect-square w-full text-[9px]`}
                 style={{ fontFamily: 'system-ui', color: CELL_COLOR[day.status] }}
                 onClick={() => handleClick(day)}
               >
