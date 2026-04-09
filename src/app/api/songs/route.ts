@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   const month     = now.month() // 0-indexed: 1 = February
   const year      = now.year()
 
-  if (month !== 1) {
+  if (month !== 1 && process.env.UPLOAD_ALWAYS_OPEN !== 'true') {
     return NextResponse.json(
       { error: 'Songs can only be posted during February.' },
       { status: 400 }
