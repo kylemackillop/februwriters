@@ -30,13 +30,6 @@ export async function POST(req: NextRequest) {
     where: { userId_dayNumber_year: { userId, dayNumber, year } },
   })
 
-  if (existing) {
-    return NextResponse.json(
-      { error: 'DAY_TAKEN', dayNumber },
-      { status: 409 }
-    )
-  }
-
   let body: {
     title: string
     audioUrl: string
@@ -73,25 +66,40 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const song = await db.song.create({
-      data: {
-        title: title.trim().slice(0, 64),
-        slug,
-        audioUrl,
-        artworkUrl: artworkUrl ?? null,
-        lyrics:     lyrics?.trim()  || null,
-        notes:      notes?.trim()   || null,
-        genre:      genre           || null,
-        durationSeconds,
-        dayNumber,
-        year,
-        isPublic:   isPublic  ?? true,
-        isDraft:    isDraft   ?? false,
-        userId,
-      },
-    })
+    const song = existing
+      ? await db.song.update({
+          where: { id: existing.id },
+          data: {
+            title: title.trim().slice(0, 64),
+            audioUrl,
+            artworkUrl: artworkUrl ?? null,
+            lyrics:     lyrics?.trim()  || null,
+            notes:      notes?.trim()   || null,
+            genre:      genre           || null,
+            durationSeconds,
+            isPublic:   isPublic  ?? true,
+            isDraft:    isDraft   ?? false,
+          },
+        })
+      : await db.song.create({
+          data: {
+            title: title.trim().slice(0, 64),
+            slug,
+            audioUrl,
+            artworkUrl: artworkUrl ?? null,
+            lyrics:     lyrics?.trim()  || null,
+            notes:      notes?.trim()   || null,
+            genre:      genre           || null,
+            durationSeconds,
+            dayNumber,
+            year,
+            isPublic:   isPublic  ?? true,
+            isDraft:    isDraft   ?? false,
+            userId,
+          },
+        })
 
-    return NextResponse.json({ slug: song.slug }, { status: 201 })
+    return NextResponse.json({ slug: song.slug }, { status: existing ? 200 : 201 })
   } catch (err) {
     console.error('[songs POST]', err)
     return NextResponse.json({ error: 'SERVER_ERROR' }, { status: 500 })
