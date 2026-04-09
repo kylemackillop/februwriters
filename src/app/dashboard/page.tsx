@@ -32,7 +32,7 @@ export default async function DashboardPage() {
 
   const songs = await db.song.findMany({
     where: { userId },
-    select: { id: true, dayNumber: true, title: true, audioUrl: true, createdAt: true },
+    select: { id: true, slug: true, dayNumber: true, title: true, audioUrl: true, durationSeconds: true, createdAt: true },
     orderBy: { dayNumber: 'desc' },
   }) as SongRow[]
 

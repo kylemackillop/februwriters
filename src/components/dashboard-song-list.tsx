@@ -8,9 +8,11 @@ import UploadDialog from '@/components/upload-dialog'
 
 export type SongRow = {
   id: string
+  slug: string
   dayNumber: number
   title: string | null
   audioUrl: string
+  durationSeconds: number
   createdAt: Date
 }
 
@@ -79,12 +81,15 @@ export default function DashboardSongList({ songs, username, today, daysInFebrua
               </span>
               <div className="min-w-0">
                 <Link
-                  href={`/songs/${song.id}`}
+                  href={`/songs/${song.slug}`}
                   className="text-sm font-semibold text-feb-slate hover:underline underline-offset-2 decoration-feb-slate/20 truncate block"
                 >
                   {formatTitle(song)}
                 </Link>
                 <span className="text-[10px] text-feb-bluegray">—</span>
+                <span className="text-[10px] text-feb-bluegray">
+                  {Math.floor(song.durationSeconds / 60)}:{String(song.durationSeconds % 60).padStart(2, '0')}
+                </span>
               </div>
             </div>
             <PlayButton song={song} />
