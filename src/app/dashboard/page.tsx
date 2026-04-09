@@ -10,6 +10,7 @@ type DayStatus = 'submitted' | 'missed' | 'today' | 'future'
 function getChallengeState(now: Date): {
   state: 'pre' | 'active' | 'post'
   today: number
+  displayDay: number
   daysInFebruary: number
   year: number
 } {
@@ -17,9 +18,10 @@ function getChallengeState(now: Date): {
   const month = now.getMonth()
   const day = now.getDate()
   const daysInFebruary = new Date(year, 2, 0).getDate()
-  if (month < 1) return { state: 'pre', today: day, daysInFebruary, year }
-  if (month > 1) return { state: 'post', today: daysInFebruary + 1, daysInFebruary, year }
-  return { state: 'active', today: Math.min(day, daysInFebruary), daysInFebruary, year }
+  if (month < 1) return { state: 'pre', today: 0, displayDay: day, daysInFebruary, year }
+  if (month > 1) return { state: 'post', today: daysInFebruary + 1, displayDay: daysInFebruary, daysInFebruary, year }
+  const clampedDay = Math.min(day, daysInFebruary)
+  return { state: 'active', today: clampedDay, displayDay: clampedDay, daysInFebruary, year }
 }
 
 export default async function DashboardPage() {
@@ -34,11 +36,12 @@ export default async function DashboardPage() {
     orderBy: { dayNumber: 'desc' },
   }) as SongRow[]
 
-  const { state, today, daysInFebruary, year } = getChallengeState(new Date())
+  const { state, today, displayDay, daysInFebruary, year } = getChallengeState(new Date())
 
   const submittedDays     = new Set(songs.map(s => s.dayNumber))
   const hasSubmittedToday = submittedDays.has(today)
-  const showSubmitCTA     = state === 'active' && !hasSubmittedToday
+  const isDev = process.env.NODE_ENV === 'development'
+  const showSubmitCTA = (state === 'active' && !hasSubmittedToday) || isDev
 
   const calendarDays = Array.from({ length: daysInFebruary }, (_, i) => {
     const day = i + 1
@@ -58,7 +61,7 @@ export default async function DashboardPage() {
         <div className="pt-4 pb-3 md:pt-6 flex items-end justify-between">
           <div>
             <span className={`font-serif text-6xl font-bold leading-none ${state === 'active' ? 'text-feb-slate' : 'text-feb-bluegray'}`}>
-              {today}
+              {displayDay}
             </span>
             <p className="text-feb-bluegray text-xs mt-1">
               {state === 'pre'
