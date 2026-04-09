@@ -43,6 +43,7 @@ export default async function DashboardPage() {
   const isDev = process.env.NODE_ENV === 'development'
   const uploadAlwaysOpen = process.env.UPLOAD_ALWAYS_OPEN === 'true'
   const showSubmitCTA = (state === 'active' && !hasSubmittedToday) || isDev || uploadAlwaysOpen
+  const dialogDay = state === 'active' ? today : daysInFebruary
 
   const calendarDays = Array.from({ length: daysInFebruary }, (_, i) => {
     const day = i + 1
@@ -76,7 +77,7 @@ export default async function DashboardPage() {
           {/* Desktop submit CTA */}
           {showSubmitCTA && (
             <div className="hidden lg:flex">
-              <UploadDialogDesktopTrigger today={today} />
+              <UploadDialogDesktopTrigger today={dialogDay} />
             </div>
           )}
         </div>
@@ -122,7 +123,7 @@ export default async function DashboardPage() {
             <DashboardSongList
               songs={songs}
               username={username ?? ''}
-              today={today}
+              today={dialogDay}
               daysInFebruary={daysInFebruary}
               showSubmitCTA={showSubmitCTA}
             />

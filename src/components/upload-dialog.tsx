@@ -79,11 +79,36 @@ export default function UploadDialog({
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
         const res = JSON.parse(xhr.responseText)
-        const audioUrl = res.secure_url as string
-        const id       = res.public_id  as string
-        const songTitle = title.trim() || `${date.replace(/\s/g, '')}_Day${dayNumber}`
-        setStatus('success')
-        onSuccess({ id, title: songTitle, audioUrl })
+        const audioUrl        = res.secure_url as string
+        const durationSeconds = Math.round(res.duration ?? 0)
+        const songTitle       = title.trim() || `${date.replace(/\s/g, '')}_Day${dayNumber}`
+
+        // Save to database
+        fetch('/api/songs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: songTitle,
+            audioUrl,
+            durationSeconds,
+            isPublic: true,
+            isDraft: false,
+          }),
+        })
+          .then(apiRes => apiRes.json().then(apiData => ({ apiRes, apiData })))
+          .then(({ apiRes, apiData }) => {
+            if (!apiRes.ok) {
+              setErrorMessage(apiData.error ?? 'Failed to save song.')
+              setStatus('error')
+              return
+            }
+            setStatus('success')
+            onSuccess({ id: apiData.slug, title: songTitle, audioUrl })
+          })
+          .catch(() => {
+            setErrorMessage('Failed to save song. Try again.')
+            setStatus('error')
+          })
       } else {
         let msg = 'Upload failed.'
         try { msg = JSON.parse(xhr.responseText)?.error?.message ?? msg } catch { /* ignore */ }
