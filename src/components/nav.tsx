@@ -18,7 +18,7 @@ export default function Nav() {
 
         {status === 'loading' ? null : session ? (
           <div className="flex items-center gap-6">
-            <span className="text-feb-linen text-sm">
+            <span className="text-feb-gold text-sm font-bold">
               {(session.user as any)?.name ?? (session.user as any)?.username}
             </span>
             <button
