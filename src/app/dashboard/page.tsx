@@ -41,7 +41,8 @@ export default async function DashboardPage() {
   const submittedDays     = new Set(songs.map(s => s.dayNumber))
   const hasSubmittedToday = submittedDays.has(today)
   const isDev = process.env.NODE_ENV === 'development'
-  const showSubmitCTA = (state === 'active' && !hasSubmittedToday) || isDev
+  const uploadAlwaysOpen = process.env.UPLOAD_ALWAYS_OPEN === 'true'
+  const showSubmitCTA = (state === 'active' && !hasSubmittedToday) || isDev || uploadAlwaysOpen
 
   const calendarDays = Array.from({ length: daysInFebruary }, (_, i) => {
     const day = i + 1
